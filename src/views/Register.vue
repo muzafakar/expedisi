@@ -73,6 +73,9 @@ export default {
           console.log(hasil.data.note, "ini adalah hasil");
           this.$router.push("/login");
           this.loading = false;
+        })
+        .catch(er => {
+          alert("er");
         });
     }
   }

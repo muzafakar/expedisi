@@ -32,6 +32,13 @@
 
               <v-card-actions>
                 <v-btn block :loading="loading" color="primary" @click="login()">Login</v-btn>
+                <br />
+                <v-btn
+                  block
+                  :loading="loading"
+                  color="primary"
+                  @click="$router.push('/register')"
+                >register</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -44,6 +51,7 @@
 <script>
 // import { setTimeout } from "timers";
 import login from "axios";
+import { error } from "util";
 export default {
   data: () => ({
     loading: false,
@@ -63,6 +71,9 @@ export default {
           sessionStorage.setItem("token", access_token);
           this.loading = !this.loading;
           this.$router.push("/dashboard");
+        })
+        .catch(error => {
+          alert("error gan");
         });
     }
   }
