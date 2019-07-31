@@ -17,14 +17,20 @@
             <v-card-text>
               <v-container grid-list-md>
                 <v-layout wrap>
-                  <v-flex xs12 sm6 md4>
+                  <v-flex xs12 sm12 md12>
                     <v-text-field v-model="editedItem.username" label="Email penerima"></v-text-field>
                   </v-flex>
-                  <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.email" label="Alamat pengiriman"></v-text-field>
+                  <v-flex xs12 sm12 md12>
+                    <v-text-field v-model="editedItem.alamat" label="Alamat pengiriman"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.email" label="Barang gan"></v-text-field>
+                    <v-select :items="parseBarangName" label="Barang 1"></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-select :items="parseBarangName" label="Barang 2"></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-select :items="parseBarangName" label="Barang 3"></v-select>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -53,6 +59,23 @@
 export default {
   data: () => ({
     dialog: false,
+    barangs: [
+      {
+        id: "idBarang",
+        nama: "NamaBarang",
+        detail: "OtherDetails..."
+      },
+      {
+        id: "idBarang",
+        nama: "NamaBarang3",
+        detail: "OtherDetails..."
+      },
+      {
+        id: "idBarang",
+        nama: "NamaBarang2",
+        detail: "OtherDetails..."
+      }
+    ],
     headers: [
       {
         text: "ID Order",
@@ -70,11 +93,13 @@ export default {
     editedItem: {
       id: "",
       username: "",
+      alamat: "",
       email: "",
       status: ""
     },
     defaultItem: {
       id: "",
+      alamat: "",
       username: "",
       email: "",
       status: ""
@@ -84,6 +109,16 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+
+    parseBarangName() {
+      const barangNames = [];
+
+      this.barangs.forEach(function(element) {
+        barangNames.push(element.nama);
+      });
+
+      return barangNames;
     }
   },
 
