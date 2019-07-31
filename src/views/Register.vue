@@ -10,23 +10,30 @@
                   <v-avatar size="150" color="red">
                     <img src="../assets/logo.png" alt="admin" />
                   </v-avatar>
-                  <h1 class="flex my-4 primary--text">Login Expedisi</h1>
+                  <h1 class="flex my-4 primary--text">Regisrasi Expedisi</h1>
                 </div>
               </v-card-text>
               <v-form @keyup.enter="login()" @submit="login()">
+                <v-text-field
+                  name="name"
+                  label="Nama Expedisi"
+                  prepend-icon="mdi-person"
+                  type="text"
+                  v-model="register.email"
+                />
                 <v-text-field
                   name="email"
                   label="Email"
                   prepend-icon="mdi-email"
                   type="email"
-                  v-model="auth.email"
+                  v-model="register.email"
                 />
                 <v-text-field
                   name="password"
                   label="Password"
                   prepend-icon="mdi-lock"
                   type="password"
-                  v-model="auth.password"
+                  v-model="register.password"
                 />
               </v-form>
 
@@ -46,7 +53,7 @@ import { setTimeout } from "timers";
 export default {
   data: () => ({
     loading: false,
-    auth: {
+    register: {
       email: "",
       password: ""
     }
@@ -56,8 +63,8 @@ export default {
       this.loading = true;
       setTimeout(() => {
         this.loading = false;
-        console.log(this.auth.email);
-        console.log(this.auth.password);
+        console.log(this.register.email);
+        console.log(this.register.password);
       }, 1500);
     }
   }
