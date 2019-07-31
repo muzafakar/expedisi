@@ -5,6 +5,8 @@
       <v-toolbar-title>Marketplace gan</v-toolbar-title>
     </v-app-bar>
 
+    <ModalCreate />
+
     <v-container grid-list-xs>
       <DataTable />
     </v-container>
@@ -13,9 +15,11 @@
 
 <script>
 import DataTable from "./global/DataTable";
+import ModalCreate from "./global/ModalCreate";
 export default {
   components: {
-    DataTable
+    DataTable,
+    ModalCreate
   }
 };
 </script>

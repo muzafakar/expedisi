@@ -11,6 +11,9 @@ export default {
   name: "App",
   data: () => ({
     //
-  })
+  }),
+  created() {
+    window.getApp = this;
+  }
 };
 </script>

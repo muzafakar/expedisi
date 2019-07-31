@@ -5,7 +5,9 @@
       <v-toolbar-title>Orderan</v-toolbar-title>
       <v-spacer />
       <v-toolbar-items>
-        <v-btn color="primary" small @click="expand = !expand">{{expand ? 'MX' : 'SX'}}</v-btn>
+        <v-btn color="primary" @click="modalCreate">
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
         <v-text-field
           v-model="search"
           prepend-icon="mdi-magnify"
@@ -35,11 +37,6 @@
       <template v-slot:expand="props">
         <v-card flat class="mx-5 my-2">
           <!-- TODO detail belanjaan disini -->
-          <h4>Jumlah channel: {{props.item.channelCount}}</h4>
-          <h4>Iuran Perbulan: Rp. {{props.item.cost}}</h4>
-          <h4>Denda: {{props.item.isFined ? 'Rp.' + props.item.fineCharge : '-'}}</h4>
-          <h4>Fee Petugas: {{props.item.workerFee}}%</h4>
-          <h4>Tanggal Iuran: {{props.item.paymentRange[0] +' - '+ props.item.paymentRange[1]}} (setiap bulannya)</h4>
         </v-card>
       </template>
     </v-data-table>
@@ -50,13 +47,18 @@
 export default {
   data: () => ({
     search: "",
-    loading: false,
     expand: false,
     headers: [
-      { text: "Id Order", align: "left", value: "name" },
-      { text: "Username", align: "left", value: "owner" },
-      { text: "Tanggal", align: "left", value: "address" }
+      { text: "Id Order", align: "left", value: "id" },
+      { text: "Username", align: "left", value: "name" },
+      { text: "Status", align: "left", value: "status" },
+      { text: "Tanggal", align: "left", value: "date" }
     ]
-  })
+  }),
+  methods: {
+    modalCreate() {
+      window.getApp.$emit("MODAL_CREATE");
+    }
+  }
 };
 </script>
