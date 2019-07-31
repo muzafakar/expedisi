@@ -10,7 +10,7 @@
                   <v-avatar size="150" color="red">
                     <img src="../assets/logo.png" alt="admin" />
                   </v-avatar>
-                  <h1 class="flex my-4 primary--text">Login Expedisi</h1>
+                  <h1 class="flex my-4 primary--text">Login markeplace/toko</h1>
                 </div>
               </v-card-text>
               <v-form @keyup.enter="login()" @submit="login()">
@@ -19,7 +19,7 @@
                   label="Email"
                   prepend-icon="mdi-email"
                   type="email"
-                  v-model="auth.email"
+                  v-model="auth.username"
                 />
                 <v-text-field
                   name="password"
@@ -42,23 +42,28 @@
 </template>
 
 <script>
-import { setTimeout } from "timers";
+// import { setTimeout } from "timers";
+import login from "axios";
 export default {
   data: () => ({
     loading: false,
     auth: {
-      email: "",
-      password: ""
+      username: "",
+      password: "",
+      provider: "users"
     }
   }),
   methods: {
     login() {
       this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-        console.log(this.auth.email);
-        console.log(this.auth.password);
-      }, 1500);
+      login
+        .post("http://10.200.179.166/geekcreation/public/api/login", this.auth)
+        .then(res => {
+          let { access_token } = res.data;
+          sessionStorage.setItem("token", access_token);
+          this.loading = !this.loading;
+          this.$router.push("/dashboard");
+        });
     }
   }
 };
