@@ -51,7 +51,6 @@
 <script>
 // import { setTimeout } from "timers";
 import login from "axios";
-import { error } from "util";
 export default {
   data: () => ({
     loading: false,
@@ -63,13 +62,13 @@ export default {
   }),
   methods: {
     login() {
-      this.loading = true;
+      // this.loading = true;
       login
         .post("http://10.200.179.166/geekcreation/public/api/login", this.auth)
         .then(res => {
           let { access_token } = res.data;
           sessionStorage.setItem("token", access_token);
-          this.loading = !this.loading;
+          // this.loading = !this.loading;
           this.$router.push("/dashboard");
         })
         .catch(error => {

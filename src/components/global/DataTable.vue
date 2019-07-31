@@ -1,62 +1,151 @@
 <template>
-  <v-card class="elevation-3">
-    <v-toolbar flat color="primary" dark>
-      <v-icon>mdi-chart</v-icon>
-      <v-toolbar-title>Orderan</v-toolbar-title>
-      <v-spacer />
-      <v-toolbar-items>
-        <v-btn color="primary" small @click="expand = !expand">{{expand ? 'MX' : 'SX'}}</v-btn>
-        <v-text-field
-          v-model="search"
-          prepend-icon="mdi-magnify"
-          clearable
-          label="Search"
-          color="white"
-          single-line
-          hide-details
-        />
-      </v-toolbar-items>
-    </v-toolbar>
+  <v-data-table :headers="headers" :items="desserts" sort-by="calories" class="elevation-1">
+    <template v-slot:top>
+      <v-toolbar flat color="white">
+        <v-toolbar-title>Orderan Gan</v-toolbar-title>
+        <v-divider class="mx-4" inset vertical></v-divider>
+        <v-spacer></v-spacer>
+        <v-dialog v-model="dialog" max-width="500px">
+          <template v-slot:activator="{ on }">
+            <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="headline">{{ formTitle }}</span>
+            </v-card-title>
 
-    <v-data-table
-      :headers="headers"
-      :items="$store.state.tvkabel"
-      :search="search"
-      :expand="expand"
-    >
-      <template v-slot:items="props">
-        <tr @click="props.expanded = !props.expanded">
-          <td>{{props.item.name}}</td>
-          <td>{{generateOwnerName(props.item.ownerId)}}</td>
-          <td>{{props.item.address}}</td>
-        </tr>
-      </template>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="editedItem.username" label="Email penerima"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="editedItem.email" label="Alamat pengiriman"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="editedItem.email" label="Barang gan"></v-text-field>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
 
-      <template v-slot:expand="props">
-        <v-card flat class="mx-5 my-2">
-          <!-- TODO detail belanjaan disini -->
-          <h4>Jumlah channel: {{props.item.channelCount}}</h4>
-          <h4>Iuran Perbulan: Rp. {{props.item.cost}}</h4>
-          <h4>Denda: {{props.item.isFined ? 'Rp.' + props.item.fineCharge : '-'}}</h4>
-          <h4>Fee Petugas: {{props.item.workerFee}}%</h4>
-          <h4>Tanggal Iuran: {{props.item.paymentRange[0] +' - '+ props.item.paymentRange[1]}} (setiap bulannya)</h4>
-        </v-card>
-      </template>
-    </v-data-table>
-  </v-card>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
+    </template>
+    <template v-slot:item.action="{ item }">
+      <v-btn @click="showDetail(item)" color="primary">Detail</v-btn>
+      <v-btn @click="kirimBarang(item)" color="primary">Kirim</v-btn>
+    </template>
+    <template v-slot:no-data>
+      <v-btn color="primary" @click="initialize">Reset</v-btn>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
 export default {
   data: () => ({
-    search: "",
-    loading: false,
-    expand: false,
+    dialog: false,
     headers: [
-      { text: "Id Order", align: "left", value: "name" },
-      { text: "Username", align: "left", value: "owner" },
-      { text: "Tanggal", align: "left", value: "address" }
-    ]
-  })
+      {
+        text: "ID Order",
+        align: "left",
+        sortable: false,
+        value: "id"
+      },
+      { text: "Nama Penerima", value: "username" },
+      { text: "Email", value: "email" },
+      { text: "Status", value: "status" },
+      { text: "Actions", value: "action", sortable: false }
+    ],
+    desserts: [],
+    editedIndex: -1,
+    editedItem: {
+      id: "",
+      username: "",
+      email: "",
+      status: ""
+    },
+    defaultItem: {
+      id: "",
+      username: "",
+      email: "",
+      status: ""
+    }
+  }),
+
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    }
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    }
+  },
+
+  created() {
+    this.initialize();
+  },
+
+  methods: {
+    initialize() {
+      this.desserts = [
+        {
+          id: "ASDF12",
+          username: "GGWP",
+          email: "email@provider.com",
+          status: "Belum Terkirim"
+        }
+      ];
+    },
+
+    showDetail(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    kirimBarang(item) {
+      // TODO post new orderang status
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.editedItem.status = "dikirim";
+      this.desserts.push(this.editedItem);
+    },
+
+    deleteItem(item) {
+      const index = this.desserts.indexOf(item);
+      confirm("Are you sure you want to delete this item?") &&
+        this.desserts.splice(index, 1);
+    },
+
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+      } else {
+        this.editedItem.id = "randomID";
+        this.desserts.push(this.editedItem);
+      }
+      this.close();
+    }
+  }
 };
 </script>

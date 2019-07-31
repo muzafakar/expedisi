@@ -62,7 +62,7 @@ export default {
   }),
   methods: {
     login() {
-      this.loading = true;
+      // this.loading = true;
       reg
         .post(
           "http://10.200.179.166/geekcreation/public/api/users/register",
@@ -72,7 +72,7 @@ export default {
           console.log(hasil, "ini adalah hasil");
           console.log(hasil.data.note, "ini adalah hasil");
           this.$router.push("/login");
-          this.loading = false;
+          // this.loading = false;
         })
         .catch(er => {
           alert("er");
