@@ -17,15 +17,24 @@
             <v-card-text>
               <v-container grid-list-md>
                 <v-layout wrap>
-                  <v-flex xs12 sm6 md4>
+                  <v-flex xs12 sm12 md12>
                     <v-text-field v-model="editedItem.username" label="Email penerima"></v-text-field>
                   </v-flex>
-                  <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.email" label="Alamat pengiriman"></v-text-field>
+                  <v-flex xs12 sm12 md12>
+                    <v-text-field v-model="editedItem.alamat" label="Alamat pengiriman"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.email" label="Barang gan"></v-text-field>
+                    <v-select
+                      v-model="editedItem.id"
+                      :items="produk"
+                      item-text="nama_produk"
+                      item-value="id"
+                      label="pilih barang"
+                    ></v-select>
                   </v-flex>
+                  <!-- <v-flex xs12 sm6 md4>
+                    <v-select :items="parseBarangName" label="Barang 3"></v-select>
+                  </v-flex>-->
                 </v-layout>
               </v-container>
             </v-card-text>
@@ -33,7 +42,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              <v-btn color="blue darken-1" text @click="save()">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -50,9 +59,27 @@
 </template>
 
 <script>
+import a from "axios";
 export default {
   data: () => ({
     dialog: false,
+    barangs: [
+      {
+        id: "idBarang",
+        nama: "NamaBarang",
+        detail: "OtherDetails..."
+      },
+      {
+        id: "idBarang",
+        nama: "NamaBarang3",
+        detail: "OtherDetails..."
+      },
+      {
+        id: "idBarang",
+        nama: "NamaBarang2",
+        detail: "OtherDetails..."
+      }
+    ],
     headers: [
       {
         text: "ID Order",
@@ -70,20 +97,33 @@ export default {
     editedItem: {
       id: "",
       username: "",
+      alamat: "",
       email: "",
       status: ""
     },
     defaultItem: {
       id: "",
+      alamat: "",
       username: "",
       email: "",
       status: ""
-    }
+    },
+    produk: null
   }),
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+
+    parseBarangName() {
+      const barangNames = [];
+
+      this.produk.forEach(function(element) {
+        barangNames.push(element.nama_produk);
+      });
+
+      return barangNames;
     }
   },
 
@@ -96,8 +136,19 @@ export default {
   created() {
     this.initialize();
   },
-
+  mounted() {
+    this.getProduk();
+  },
   methods: {
+    getProduk() {
+      a.get("http://10.200.179.166/geekcreation/public/api/produk/all").then(
+        res => {
+          let { data } = res;
+          this.produk = data;
+          console.log(this.produk);
+        }
+      );
+    },
     initialize() {
       this.desserts = [
         {
@@ -138,13 +189,14 @@ export default {
     },
 
     save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      } else {
-        this.editedItem.id = "randomID";
-        this.desserts.push(this.editedItem);
-      }
-      this.close();
+      console.log(this.editedItem);
+      // if (this.editedIndex > -1) {
+      //   Object.assign(this.desserts[this.editedIndex], this.editedItem);
+      // } else {
+      //   this.editedItem.id = "randomID";
+      //   this.desserts.push(this.editedItem);
+      // }
+      // this.close();
     }
   }
 };
