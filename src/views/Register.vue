@@ -19,7 +19,7 @@
                   label="Nama Expedisi"
                   prepend-icon="mdi-account"
                   type="text"
-                  v-model="register.email"
+                  v-model="register.name"
                 />
                 <v-text-field
                   name="email"
@@ -38,7 +38,7 @@
               </v-form>
 
               <v-card-actions>
-                <v-btn block :loading="loading" color="primary" @click="login()">Login</v-btn>
+                <v-btn block :loading="loading" color="primary" @click="login()">Registrasi</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -50,22 +50,30 @@
 
 <script>
 import { setTimeout } from "timers";
+import reg from "axios";
 export default {
   data: () => ({
     loading: false,
     register: {
       email: "",
+      name: "",
       password: ""
     }
   }),
   methods: {
     login() {
       this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-        console.log(this.register.email);
-        console.log(this.register.password);
-      }, 1500);
+      reg
+        .post(
+          "http://10.200.179.166/geekcreation/public/api/users/register",
+          this.register
+        )
+        .then(hasil => {
+          console.log(hasil, "ini adalah hasil");
+          console.log(hasil.data.note, "ini adalah hasil");
+          this.$router.push("/login");
+          this.loading = false;
+        });
     }
   }
 };
