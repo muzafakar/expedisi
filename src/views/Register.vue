@@ -17,7 +17,7 @@
                 <v-text-field
                   name="name"
                   label="Nama Expedisi"
-                  prepend-icon="mdi-person"
+                  prepend-icon="mdi-account"
                   type="text"
                   v-model="register.email"
                 />

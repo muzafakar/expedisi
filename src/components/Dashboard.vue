@@ -1,15 +1,21 @@
 <template>
   <div>
-    <AppBar />
-    <h1>ggwp</h1>
+    <v-app-bar color="primary" dark app>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-toolbar-title>Marketplace gan</v-toolbar-title>
+    </v-app-bar>
+
+    <v-container grid-list-xs>
+      <DataTable />
+    </v-container>
   </div>
 </template>
 
 <script>
-import AppBar from "./global/AppBar";
+import DataTable from "./global/DataTable";
 export default {
   components: {
-    AppBar
+    DataTable
   }
 };
 </script>
