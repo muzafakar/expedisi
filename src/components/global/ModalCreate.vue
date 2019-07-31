@@ -23,7 +23,7 @@
           <v-container grid-list-md>
             <v-layout row wrap>
               <v-flex xs12>
-                <v-text-field name="name" label="Name" required v-model="name" type="text" />
+                <v-text-field name="name" label="Name" required type="text" />
               </v-flex>
               <v-flex xs6>
                 <v-text-field
@@ -31,7 +31,6 @@
                   type="text"
                   label="Phone"
                   required
-                  v-model="phone"
                   hint="Tidak harus +62"
                 />
               </v-flex>
@@ -41,19 +40,11 @@
                   label="Email"
                   required
                   type="text"
-                  v-model="email"
                   hint="Digunakan login di apps"
                 />
               </v-flex>
               <v-flex xs12>
-                <v-textarea
-                  outline
-                  name="address"
-                  label="Address"
-                  required
-                  v-model="address"
-                  type="text"
-                />
+                <v-textarea outline name="address" label="Address" required type="text" />
               </v-flex>
             </v-layout>
           </v-container>
